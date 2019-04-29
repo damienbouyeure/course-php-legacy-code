@@ -1,7 +1,5 @@
 <?php
 
-namespace controller;
-
 require "conf.inc.php";
 
 function myAutoloader($class)
