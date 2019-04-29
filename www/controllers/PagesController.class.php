@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Controller;
+
+use App\Core\View;
+
 class PagesController
 {
     public function defaultAction()

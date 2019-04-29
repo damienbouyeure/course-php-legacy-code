@@ -1,5 +1,10 @@
 <?php
 
+namespace App\Core;
+
+use Exception;
+use PDO;
+
 class BaseSQL
 {
     private $pdo;
