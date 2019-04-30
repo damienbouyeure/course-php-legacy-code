@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Core;
 
 
-class Routing
+final class Routing
 {
     public static $routeFile = "routes.yml";
 
-    public static function getRoute($slug)
+    public static function getRoute(string $slug) : array
     {
 
         $routes = yaml_parse_file(self::$routeFile);
@@ -19,8 +19,7 @@ class Routing
             }
             $c = ucfirst($routes[$slug]["controller"]) . "Controller";
             $a = $routes[$slug]["action"] . "Action";
-            $cPath = "controllers/" . $c . ".class.php";
-            $c  = '\App\Controller\\' .  $c;
+            $cPath = "controllers/" . $c . ".php";
 
         } else {
             return ["c" => null, "a" => null, "cPath" => null];
@@ -29,7 +28,7 @@ class Routing
     }
 
 
-    public static function getSlug($c, $a)
+    public static function getSlug(string $c,string $a) : ?string
     {
         $routes = yaml_parse_file(self::$routeFile);
         foreach ($routes as $slug => $cAndA) {

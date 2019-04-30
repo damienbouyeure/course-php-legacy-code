@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace App\Core;
 
-class View
+final class View
 {
     private $v;
     private $t;
     private $data = [];
 
-    public function __construct($v, $t = "back")
+    public function __construct(string $v,string $t = "back")
     {
         $this->setView($v);
         $this->setTemplate($t);
     }
 
-    public function setView($v)
+    public function setView(string $v)
     {
         $viewPath = "views/" . $v . ".view.php";
         if (file_exists($viewPath)) {
@@ -26,7 +26,7 @@ class View
         }
     }
 
-    public function setTemplate($t)
+    public function setTemplate(string $t)
     {
         $templatePath = "views/templates/" . $t . ".tpl.php";
         if (file_exists($templatePath)) {
@@ -36,7 +36,7 @@ class View
         }
     }
 
-    public function addModal($modal, $config)
+    public function addModal(string $modal,array $config)
     {
         $modalPath = "views/modals/" . $modal . ".mod.php";
         if (file_exists($modalPath)) {
@@ -46,7 +46,7 @@ class View
         }
     }
 
-    public function assign($key, $value)
+    public function assign(string $key, array $value)
     {
         $this->data[$key] = $value;
     }

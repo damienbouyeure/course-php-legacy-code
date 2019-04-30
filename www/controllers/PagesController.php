@@ -6,9 +6,9 @@ namespace App\Controller;
 
 use App\Core\View;
 
-class PagesController
+final class PagesController
 {
-    public function defaultAction()
+    public function defaultAction() : void
     {
         $v = new View("homepage", "back");
         $v->assign("pseudo", "prof");

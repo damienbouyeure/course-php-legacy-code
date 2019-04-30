@@ -2,57 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Models;
+namespace App\Form;
 
-use App\Core\BaseSQL;
 use App\Core\Routing;
 
-class Users extends BaseSQL
+class RegisterForm
 {
-    public $id = null;
-    public $firstname;
-    public $lastname;
-    public $email;
-    public $pwd;
-    public $role = 1;
-    public $status = 0;
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-
-    public function setFirstname($firstname)
-    {
-        $this->firstname = ucwords(strtolower(trim($firstname)));
-    }
-
-    public function setLastname($lastname)
-    {
-        $this->lastname = strtoupper(trim($lastname));
-    }
-
-    public function setEmail($email)
-    {
-        $this->email = strtolower(trim($email));
-    }
-
-    public function setPwd($pwd)
-    {
-        $this->pwd = password_hash($pwd, PASSWORD_DEFAULT);
-    }
-
-    public function setRole($role)
-    {
-        $this->role = $role;
-    }
-
-    public function setStatus($status)
-    {
-        $this->status = $status;
-    }
-
-    public function getRegisterForm()
+    public function getRegisterForm(): array
     {
         return [
             "config" => [
@@ -80,25 +36,6 @@ class Users extends BaseSQL
                 "pwd" => ["type" => "password", "placeholder" => "Votre mot de passe", "required" => true, "class" => "form-control", "id" => "pwd", "minlength" => 6,
                     "error" => "Le mot de passe doit faire au minimum 6 caractères avec des minuscules, majuscules et chiffres"],
                 "pwdConfirm" => ["type" => "password", "placeholder" => "Confirmation", "required" => true, "class" => "form-control", "id" => "pwdConfirm", "confirm" => "pwd", "error" => "Les mots de passe ne correspondent pas"]
-            ]
-        ];
-    }
-
-    public function getLoginForm()
-    {
-        return [
-            "config" => [
-                "method" => "POST",
-                "action" => "",
-                "class" => "",
-                "id" => "",
-                "submit" => "Se connecter",
-                "reset" => "Annuler"],
-            "data" => [
-                "email" => ["type" => "email", "placeholder" => "Votre email", "required" => true, "class" => "form-control", "id" => "email",
-                    "error" => "L'email n'est pas valide"],
-                "pwd" => ["type" => "password", "placeholder" => "Votre mot de passe", "required" => true, "class" => "form-control", "id" => "pwd",
-                    "error" => "Veuillez préciser un mot de passe"]
             ]
         ];
     }

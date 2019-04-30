@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Core;
 
-class Validator
+final class Validator
 {
     public $errors = [];
 
@@ -46,27 +46,27 @@ class Validator
     }
 
 
-    public static function notEmpty($string)
+    public static function notEmpty($string) : bool
     {
         return !empty(trim($string));
     }
 
-    public static function minLength($string, $length)
+    public static function minLength($string, $length) : bool
     {
         return strlen(trim($string)) >= $length;
     }
 
-    public static function maxLength($string, $length)
+    public static function maxLength($string, $length) : bool
     {
         return strlen(trim($string)) <= $length;
     }
 
-    public static function checkEmail($string)
+    public static function checkEmail($string) : string
     {
         return filter_var(trim($string), FILTER_VALIDATE_EMAIL);
     }
 
-    public static function checkPassword($string)
+    public static function checkPassword($string) : bool
     {
         return (
             preg_match("#[a-z]#", $string) &&
