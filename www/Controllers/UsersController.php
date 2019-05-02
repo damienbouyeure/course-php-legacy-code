@@ -10,17 +10,19 @@ use App\Form\LoginForm;
 use App\Form\RegisterForm;
 use App\Models\Users;
 use App\Repository\UserRepository;
-
+use App\ValueObject\Email;
+use App\ValueObject\Identity;
+use App\ValueObject\Password;
+use App\ValueObject\ViewObject as ViewObject;
+use App\ValueObject\Template;
 
 final class UsersController
 {
-    private $user;
     private $userRepository;
 
     public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
-        $this->user = new Users();
     }
 
     public function defaultAction(): void
@@ -32,8 +34,8 @@ final class UsersController
     {
         $registerForm = new RegisterForm();
         $form = $registerForm->getRegisterForm();
-        $v = new View("addUser", "front");
-        $v->assign("form", $form);
+       $view = new View(new ViewObject("addUser"), new Template("front"));
+       $view->assign("form", $form);
     }
 
     public function saveAction(): void
@@ -46,15 +48,15 @@ final class UsersController
             $validator = new Validator($form, $data);
             $form["errors"] = $validator->errors;
             if (empty($errors)) {
-                $this->user->setFirstname($data["firstname"]);
-                $this->user->setLastname($data["lastname"]);
-                $this->user->setEmail($data["email"]);
-                $this->user->setPwd($data["pwd"]);
-                $this->userRepository->save($this->user);
+                $user = new Users(new Identity($data["firstname"], $data["lastname"]), new Email($data["email"]), new Password($data["pwd"]));
+                $this->userRepository->save($user);
+                $view = new View(new ViewObject("homepage"), new Template("back"));
+                $view->assign("pseudo", "prof");
+
             }
         }
-        $v = new View("addUser", "front");
-        $v->assign("form", $form);
+       $view = new View(new ViewObject("addUser"), new Template("front"));
+       $view->assign("form", $form);
     }
 
 
@@ -74,13 +76,13 @@ final class UsersController
                 // TODO: connexion
             }
         }
-        $v = new View("loginUser", "front");
-        $v->assign("form", $form);
+       $view = new View(new ViewObject("loginUser"), new Template("front"));
+       $view->assign("form", $form);
     }
 
 
     public function forgetPasswordAction(): void
     {
-        $v = new View("forgetPasswordUser", "front");
+       $view = new View(new ViewObject("forgetPasswordUser"),new Template( "front"));
     }
 }

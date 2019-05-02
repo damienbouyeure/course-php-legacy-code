@@ -4,39 +4,35 @@ declare(strict_types=1);
 
 namespace App\Core;
 
+use App\ValueObject\Template;
+use App\ValueObject\ViewObject;
+
 final class View
 {
-    private $v;
-    private $t;
+
+    private $view;
+    private $template;
     private $data = [];
 
-    public function __construct(string $v,string $t = "back")
+    public function __construct(ViewObject $view, Template $template )
     {
-        $this->setView($v);
-        $this->setTemplate($t);
-    }
-
-    public function setView(string $v)
-    {
-        $viewPath = "views/" . $v . ".view.php";
+        $viewPath = "views/" . $view->view() . ".view.php";
         if (file_exists($viewPath)) {
-            $this->v = $viewPath;
+            $this->view = $viewPath;
         } else {
             die("Attention le fichier view n'existe pas " . $viewPath);
         }
-    }
 
-    public function setTemplate(string $t)
-    {
-        $templatePath = "views/templates/" . $t . ".tpl.php";
+        $templatePath = "views/templates/" . $template->template() . ".tpl.php";
         if (file_exists($templatePath)) {
-            $this->t = $templatePath;
+            $this->template = $templatePath;
         } else {
             die("Attention le fichier template n'existe pas " . $templatePath);
         }
     }
 
-    public function addModal(string $modal,array $config)
+
+    public function addModal(string $modal, array $config)
     {
         $modalPath = "views/modals/" . $modal . ".mod.php";
         if (file_exists($modalPath)) {
@@ -55,6 +51,6 @@ final class View
     public function __destruct()
     {
         extract($this->data);
-        include $this->t;
+        include $this->template;
     }
 }

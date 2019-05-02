@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-
-final class LoginForm
+final class LoginForm implements LoginInterface
 {
     public function getLoginForm(): array
     {

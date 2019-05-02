@@ -4,22 +4,24 @@ declare(strict_types=1);
 
 use App\Core\Routing;
 
-
 function myAutoloader($class)
 {
     $classmap = explode('\\', $class);
-    $classPath = "core/" . $classmap[2] . ".php";
-    $classModel = "models/" . $classmap[2] . ".php";
+    $classPath = "Core/" . $classmap[2] . ".php";
+    $classModel = "Models/" . $classmap[2] . ".php";
     $classForm = "Form/" . $classmap[2] . ".php";
-    $classRepo = "Repository/" . $classmap[2] . ".php";
+    $classRepository = "Repository/" . $classmap[2] . ".php";
+    $classValueObject = "ValueObject/" . $classmap[2] . ".php";
     if (file_exists($classPath)) {
         include $classPath;
     } elseif (file_exists($classModel)) {
         include $classModel;
     } elseif (file_exists($classForm)) {
         include $classForm;
-    } elseif (file_exists($classRepo)) {
-        include $classRepo;
+    } elseif (file_exists($classRepository)) {
+        include $classRepository;
+    } elseif (file_exists($classValueObject)) {
+        include $classValueObject;
     }
 }
 

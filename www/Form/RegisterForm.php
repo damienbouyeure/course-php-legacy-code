@@ -6,7 +6,7 @@ namespace App\Form;
 
 use App\Core\Routing;
 
-class RegisterForm
+class RegisterForm implements RegisterInterface
 {
     public function getRegisterForm(): array
     {

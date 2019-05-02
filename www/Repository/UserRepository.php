@@ -3,7 +3,6 @@
 
 namespace App\Repository;
 
-
 use App\Core\SQLConnect;
 use App\Models\Users;
 
@@ -16,16 +15,11 @@ final class UserRepository
         $this->dbConnect = $SQLConnect->connect();
     }
 
-    public function setId($id)
-    {
-        $this->id = $id;
-        $this->getOneBy(["id" => $id], true);
-    }
     /**
-     * @param array $where the where clause
-     * @param bool $object if it will return an array of results ou an object
-     * @return mixed
-     */
+    * @param array $where the where clause
+    * @param bool $object if it will return an array of results ou an object
+    * @return mixed
+    */
     public function getOneBy(array $where, bool $object = false)
     {
         $sqlWhere = [];
@@ -58,24 +52,39 @@ final class UserRepository
 
     public function save(Users $users): void
     {
-        $dataObject = get_object_vars($users);
-        $dataChild = array_diff_key($dataObject, get_class_vars(get_class()));
-        if (is_null($dataChild["id"])) {
-            $sql = "INSERT INTO Users ( " .
-                implode(",", array_keys($dataChild)) . ") VALUES ( :" .
-                implode(",:", array_keys($dataChild)) . ")";
-            $query = $this->dbConnect->prepare($sql);
-            $query->execute($dataChild);
-        } else {
-            $sqlUpdate = [];
-            foreach ($dataChild as $key => $value) {
-                if ($key != "id") {
-                    $sqlUpdate[] = $key . "=:" . $key;
-                }
-            }
-            $sql = "UPDATE Users SET " . implode(",", $sqlUpdate) . " WHERE id=:id";
-            $query = $this->dbConnect->prepare($sql);
-            $query->execute($dataChild);
-        }
+        $identity = $users->identity();
+        $email = $users->email();
+        $password = $users->password();
+        $role = $users->role();
+        $status = $users->status();
+        $sql = "INSERT INTO Users (firstname, lastname, email, pwd, status, role) VALUES (:firstname, :lastname, :email, :pwd, :status, :role)";
+        $query = $this->dbConnect->prepare($sql);
+        $query->bindParam(':firstname', $identity->FirstName());
+        $query->bindParam(':lastname', $identity->LastName());
+        $query->bindParam(':email', $email->Email());
+        $query->bindParam(':pwd', $password->toString());
+        $query->bindParam(':role', $role);
+        $query->bindParam(':status', $status);
+        $query->execute();
+    }
+
+    public function update(Users $users): void
+    {
+        $identity = $users->identity();
+        $email = $users->email();
+        $password = $users->password();
+        $role = $users->role();
+        $status = $users->status();
+        $uid = $users->uid();
+        $sql = "UPDATE `Users` SET `firstname`=:firstname,`lastname`= :lastname,`email`= :email,`pwd`= :pwd,`status`=:status,`role`=:role WHERE id = :id ";
+        $query = $this->dbConnect->prepare($sql);
+        $query->bindParam(':firstname', $identity->FirstName());
+        $query->bindParam(':lastname', $identity->LastName());
+        $query->bindParam(':email', $email->Email());
+        $query->bindParam(':pwd', $password->toString());
+        $query->bindParam(':role', $role);
+        $query->bindParam(':status', $status);
+        $query->bindParam(':id', $uid->toInt());
+        $query->execute();
     }
 }
